@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Video Generator Intake</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header>
+        <p class="eyebrow">Video Generator</p>
+        <h1>Create your video brief</h1>
+        <p class="subtext">
+          Describe the video you want, then attach your own A-roll and voice-over.
+        </p>
+      </header>
+
+      <form id="video-intake-form" class="card-grid" novalidate>
+        <section class="card">
+          <h2>Prompt</h2>
+          <label for="prompt">What should this video communicate?</label>
+          <textarea id="prompt" name="prompt" rows="7" required placeholder="Example: Create a 30s product launch ad with cinematic transitions and a confident tone."></textarea>
+
+          <div class="row two-col">
+            <div>
+              <label for="duration">Target duration (seconds)</label>
+              <input id="duration" name="duration" type="number" min="5" max="600" step="1" value="30" />
+            </div>
+            <div>
+              <label for="aspect">Aspect ratio</label>
+              <select id="aspect" name="aspect">
+                <option value="16:9">16:9 (YouTube)</option>
+                <option value="9:16">9:16 (Reels/TikTok)</option>
+                <option value="1:1">1:1 (Square)</option>
+                <option value="4:5">4:5 (Instagram Feed)</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>A-roll footage</h2>
+          <label for="aRoll">Upload source video clips (multiple allowed)</label>
+          <input id="aRoll" name="aRoll" type="file" accept="video/*" multiple />
+          <ul id="aRollList" class="file-list"></ul>
+        </section>
+
+        <section class="card">
+          <h2>Voice-over</h2>
+          <label for="voiceOver">Upload final voice-over track</label>
+          <input id="voiceOver" name="voiceOver" type="file" accept="audio/*" />
+          <ul id="voiceOverList" class="file-list"></ul>
+        </section>
+
+        <section class="card output-card">
+          <h2>Generated brief payload</h2>
+          <p>Submit to save uploads and generate a persisted JSON brief response.</p>
+          <pre id="output">Fill out the form and click “Generate + Save brief”.</pre>
+          <div class="row actions">
+            <button type="submit">Generate + Save brief</button>
+            <button type="button" id="copyBtn" class="secondary">Copy JSON</button>
+            <button type="button" id="downloadBtn" class="secondary">Download JSON</button>
+          </div>
+        </section>
+      </form>
+    </main>
+
+    <script src="./ui.js"></script>
+  </body>
+</html>
