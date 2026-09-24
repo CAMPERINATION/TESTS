@@ -1,0 +1,15 @@
+{
+  "name": "bakery-prompt-short",
+  "private": true,
+  "type": "module",
+  "description": "Vertical short: Lovable bakery build framed with original JS 2D animation, synced to the voiceover.",
+  "scripts": {
+    "render": "node tools/render.mjs",
+    "stills": "node tools/render.mjs --stills",
+    "serve": "npx http-server -c-1 -p 8080 ."
+  },
+  "devDependencies": {
+    "ffmpeg-static": "^5.2.0",
+    "playwright": "^1.56.1"
+  }
+}

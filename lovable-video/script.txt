@@ -1,0 +1,15 @@
+Could one prompt give a small bakery more than just a pretty homepage?
+
+I asked Lovable to build a website for a custom cake business, and I wanted it to do something useful: help customers send an inquiry with the details the baker needs before replying.
+
+The first thing that appeared was a bakery page with a cake photo, warm colors, and a clear custom-cake message. But the design is only the first test. A nice-looking page doesn't help much if a customer still has to send three separate messages just to explain what they want.
+
+So I asked for a request form. The idea is simple: collect the customer's details, the date they need the cake, the size, the design, and any dietary requirements in one place.
+
+That gives the baker a clearer starting point. They can see what the customer is asking for before they reply, instead of trying to piece the order together from scattered messages.
+
+And that's the part I'd focus on when prompting an AI builder. Don't only describe the look of the website. Describe what the business needs to happen. Who's using it? What information do they need? What should happen after someone submits the form?
+
+Lovable turned that idea into a bakery website and inquiry form. For a real business, the next step would be testing the form on mobile and checking that every field captures information the baker actually uses.
+
+A good prompt doesn't just ask for a website. It explains the job the website needs to do.

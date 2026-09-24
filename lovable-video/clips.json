@@ -1,0 +1,10 @@
+{
+  "_note": "Source times (seconds) in media/screen.m4v. Only these real moments are used. Skipped on purpose: 6:16-6:18 (browser autofill popups with personal info) and 6:26-6:33 (empty-form validation errors).",
+  "plan":     { "from": 60.0,  "to": 60.0,  "fps": 1 },
+  "build":    { "from": 115.0, "to": 338.5, "fps": 0.3 },
+  "home":     { "from": 339.5, "to": 352.0, "fps": 15 },
+  "formTop":  { "from": 379.4, "to": 381.9, "fps": 15 },
+  "formLow":  { "from": 382.0, "to": 383.9, "fps": 15 },
+  "dash":     { "from": 394.6, "to": 404.0, "fps": 15 },
+  "home2":    { "from": 404.5, "to": 409.5, "fps": 15 }
+}
