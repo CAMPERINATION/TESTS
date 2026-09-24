@@ -1,0 +1,29 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Detective Dog Turnaround</title>
+<style>body{margin:0;background:#fbf6ec}canvas{width:100%;height:auto;display:block}</style></head>
+<body>
+<!-- Dev check: character turnaround + expressions, compared against the reference sheet -->
+<canvas id="c" width="1920" height="1400"></canvas>
+<script src="js/core.js"></script>
+<script src="js/dog.js"></script>
+<script>
+buildTextures();
+const ctx = document.getElementById('c').getContext('2d');
+ctx.fillStyle = '#fbf6ec'; ctx.fillRect(0, 0, 1920, 1400);
+setBoil(0);
+const label = (s, x, y) => brushText(ctx, s, x, y, 30, { color: PAL.ink, width: 1.8 });
+const views = [
+  ['FRONT', pose({ x: 260, y: 640, glass: { x: -38, y: -336, r: 46, ang: 2.1, hand: 'L', face: true } })],
+  ['SIDE', pose({ view: 'side', x: 720, y: 640, glass: { x: 150, y: -330, r: 40, ang: 1.9 } })],
+  ['BACK', pose({ view: 'back', x: 1180, y: 640 })],
+  ['3/4 VIEW', pose({ x: 1640, y: 640, turn: -0.55, glass: { x: -40, y: -332, r: 46, ang: 2.2, hand: 'L', face: true }, armR: { x: 100, y: -120 } })],
+];
+for (const [name, p] of views) { drawDog(ctx, p, 0); label(name, p.x, 700); }
+const heads = [
+  ['DETERMINED', pose({ x: 260, y: 1320, browL: 1, browR: 1, mouth: 'frown' })],
+  ['CURIOUS', pose({ x: 720, y: 1320, browL: -0.3, browR: -0.3, browRaise: 0.4, eyeX: 0.8, eyeY: -0.8, mouth: 'flat', handR: 'fist', armR: { x: 20, y: -250 } })],
+  ['SURPRISED', pose({ x: 1180, y: 1320, browL: -0.6, browR: -0.6, browRaise: 1, eyeSize: 1.1, mouth: 'o' })],
+  ['SUSPICIOUS', pose({ x: 1640, y: 1320, browL: 1.2, browR: 0.2, lid: 0.45, mouth: 'smirk', turn: 0.3 })],
+];
+for (const [name, p] of heads) { ctx.save(); ctx.beginPath(); ctx.rect(p.x - 230, 760, 460, 560); ctx.clip(); drawDog(ctx, Object.assign(p, { s: 1.15, y: p.y + 180 }), 0); ctx.restore(); label(name, p.x, 1370); }
+</script></body></html>

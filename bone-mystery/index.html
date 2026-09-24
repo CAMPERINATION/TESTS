@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Case of the Vanishing Bone</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="stage">
+    <canvas id="film" width="1080" height="1920" aria-label="The Case of the Vanishing Bone — animated short"></canvas>
+    <button id="replay" class="replay" hidden aria-label="Replay">↻</button>
+    <div class="controls" role="toolbar" aria-label="Playback">
+      <button id="btnPlay" aria-label="Pause">❚❚</button>
+      <button id="btnRestart" aria-label="Restart">↺</button>
+      <div id="progress" class="progress" aria-label="Timeline"><div id="progressFill"></div></div>
+      <button id="btnMute" aria-label="Unmute">🔇</button>
+    </div>
+  </main>
+  <script src="js/core.js"></script>
+  <script src="js/dog.js"></script>
+  <script src="js/props.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/scenes.js"></script>
+  <script src="animation.js"></script>
+</body>
+</html>

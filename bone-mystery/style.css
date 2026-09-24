@@ -1,0 +1,28 @@
+:root { --ui: rgba(255, 244, 222, 0.85); }
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #0b0908; overflow: hidden; }
+.stage { position: relative; height: 100vh; height: 100dvh; display: grid; place-items: center; }
+#film { height: 100%; max-width: 100vw; aspect-ratio: 9 / 16; object-fit: contain; display: block; background: #000; }
+@media (max-aspect-ratio: 9/16) { #film { width: 100vw; height: auto; } }
+.controls {
+  position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%);
+  width: min(92vw, calc(100dvh * 9 / 16 - 24px)); display: flex; align-items: center; gap: 8px;
+  padding: 6px 10px; border-radius: 999px; background: rgba(12, 9, 8, 0.45); backdrop-filter: blur(4px);
+  opacity: 0.35; transition: opacity 0.25s;
+}
+.stage:hover .controls, .controls:focus-within { opacity: 1; }
+.controls button {
+  font: 600 14px/1 system-ui, sans-serif; color: var(--ui); background: none; border: 0; cursor: pointer;
+  width: 28px; height: 28px; border-radius: 50%;
+}
+.controls button:hover { background: rgba(255, 244, 222, 0.12); }
+.progress { flex: 1; height: 4px; border-radius: 2px; background: rgba(255, 244, 222, 0.2); cursor: pointer; position: relative; }
+.progress div { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--ui); border-radius: 2px; }
+.replay {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 64px; height: 64px; border-radius: 50%; border: 2px solid var(--ui); background: rgba(12, 9, 8, 0.55);
+  color: var(--ui); font-size: 30px; cursor: pointer;
+}
+body.render .controls, body.render .replay { display: none; }
+body.render .stage { height: auto; display: block; }
+body.render #film { width: 1080px; height: 1920px; }
