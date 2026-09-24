@@ -1,0 +1,19 @@
+People keep saying, "Use AI to make money." But I always feel like they skip the bit I actually want to see: what are you making, who's it for, and what makes it worth paying for?
+
+So I decided to start with something I know instead of asking AI to come up with some random side hustle. I've worked on KDP coloring books for years, and one thing you learn pretty quickly is that a book can't just be a bunch of pages thrown together. The ideas have to fit the audience, the pages need to feel distinct, and the whole thing has to feel like one book.
+
+I wanted to see if I could turn that experience into a service for independent authors: helping them go from a vague coloring-book idea to a plan they can actually build.
+
+I started with a very basic request: "Give me ideas for an animal coloring book."
+
+The problem is, that doesn't tell the AI enough. It doesn't know who the book is for, how detailed the drawings should be, whether every page needs a different animal, or what kinds of scenes I've already used. So it gives me a list that sounds plausible, but I still have to do most of the thinking myself.
+
+This time, I gave it a real brief. I said the book was for adults who want simple animal scenes, with one animal doing a recognizable everyday activity on each page. I also gave it rules for the drawing style and told it to avoid repeating the same animal-and-activity combination.
+
+Now the output has a direction. I can ask for a page-by-page plan, then review the ideas, replace the weak ones, and make sure the book doesn't feel repetitive. From there, I can build a proper concept package: the audience, the book theme, page descriptions, illustration notes, and a first draft of the listing.
+
+And this is the part I want to be clear about: I wouldn't sell someone a raw AI list and pretend the book is done. I'd be selling the planning and the review—the part where experience helps catch the ideas that look fine at first but don't belong in the finished book.
+
+Could that become a service? Maybe. I haven't proved that authors will pay for it. The test would be to make a sample package, show it to actual KDP authors, and see if it solves a problem they already have.
+
+So AI hasn't made me money just by writing a prompt. It's helped me put together a service idea around work I already know how to do. Now the question is whether anyone wants the result.

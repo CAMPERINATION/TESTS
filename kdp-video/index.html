@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KDP Service Short</title>
+<style>
+  @font-face { font-family: "Fredoka"; src: url(fonts/Fredoka-500.ttf) format("truetype"); font-weight: 500 600; }
+  @font-face { font-family: "Fredoka"; src: url(fonts/Fredoka-700.ttf) format("truetype"); font-weight: 700; }
+  :root { --bg: #17111f; --panel: #241b31; --text: #f4eefc; --muted: #a99bbd; --accent: #ffc93c; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font-family: "Fredoka", system-ui, sans-serif; }
+  body.render { background: #000; }
+  .wrap { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 16px; min-height: 100%; }
+  canvas { background: #2b2140; height: min(78vh, calc((100vw - 32px) * 16 / 9)); aspect-ratio: 9 / 16; border-radius: 12px; box-shadow: 0 10px 40px #0008; }
+  body.render canvas { height: 1920px; width: 1080px; border-radius: 0; box-shadow: none; }
+  body.render .controls, body.render .hint { display: none; }
+  .controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; width: min(100%, 720px); background: var(--panel); padding: 10px 14px; border-radius: 12px; }
+  button, label.btn { font: inherit; font-weight: 600; background: var(--accent); color: #221; border: 0; border-radius: 999px; padding: 8px 16px; cursor: pointer; }
+  button.secondary, label.btn { background: #3a2d4d; color: var(--text); }
+  input[type=range] { flex: 1 1 240px; accent-color: var(--accent); }
+  .time { font-variant-numeric: tabular-nums; color: var(--muted); min-width: 120px; text-align: center; }
+  .hint { color: var(--muted); font-size: 14px; max-width: 720px; text-align: center; }
+  input[type=file] { display: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <canvas id="c" width="1080" height="1920"></canvas>
+  <div class="controls">
+    <button id="play">▶ Play</button>
+    <input id="seek" type="range" min="0" max="1000" value="0">
+    <span class="time" id="time">0:00 / 0:00</span>
+    <label class="btn">Load voiceover<input id="file" type="file" accept="audio/*"></label>
+    <button id="rec" class="secondary">● Record WebM</button>
+  </div>
+  <div class="hint" id="hint">Scene: –</div>
+</div>
+<audio id="vo" src="audio/voiceover.wav" preload="auto"></audio>
+<script src="src/core.js"></script>
+<script src="src/characters.js"></script>
+<script src="src/props.js"></script>
+<script src="src/timeline.js"></script>
+<script src="src/scenes1.js"></script>
+<script src="src/scenes2.js"></script>
+<script src="src/timing.js"></script>
+<script>
+(async function () {
+  const K = window.KDP;
+  const canvas = document.getElementById('c');
+  const ctx = canvas.getContext('2d');
+  const params = new URLSearchParams(location.search);
+  const renderMode = params.has('render');
+  if (renderMode) document.body.classList.add('render');
+
+  await Promise.all([document.fonts.load('700 40px Fredoka'), document.fonts.load('500 40px Fredoka')]).catch(() => {});
+
+  // timing (word timestamps) is aligned to the provided voiceover; a different recording is scaled to fit
+  K.setTiming(window.KDP_TIMING, null);
+
+  if (renderMode) {
+    // Headless render API used by tools/render.mjs
+    window.KDP_READY = { total: K.total, vo: K.voDuration };
+    window.renderFrameJPEG = (t, q = 0.92) => { K.render(ctx, t); return canvas.toDataURL('image/jpeg', q); };
+    window.renderFrame = (t) => K.render(ctx, t);
+    return;
+  }
+
+  const audio = document.getElementById('vo');
+  const playBtn = document.getElementById('play'), seek = document.getElementById('seek'), timeEl = document.getElementById('time'), hint = document.getElementById('hint');
+  let clock = 0, playing = false, lastNow = 0;
+  const fmt = (x) => `${Math.floor(x / 60)}:${String(Math.floor(x % 60)).padStart(2, '0')}`;
+
+  audio.addEventListener('loadedmetadata', () => { K.setTiming(window.KDP_TIMING, audio.duration); });
+  document.getElementById('file').addEventListener('change', (e) => {
+    const f = e.target.files[0]; if (!f) return;
+    audio.src = URL.createObjectURL(f); clock = 0; audio.currentTime = 0;
+  });
+
+  function setPlaying(p) {
+    playing = p; playBtn.textContent = p ? '❚❚ Pause' : '▶ Play';
+    if (p) { if (clock < K.voDuration) { audio.currentTime = clock; audio.play().catch(() => {}); } lastNow = performance.now(); }
+    else audio.pause();
+  }
+  playBtn.onclick = () => setPlaying(!playing);
+  seek.oninput = () => { clock = (seek.value / 1000) * K.total; audio.currentTime = Math.min(clock, K.voDuration); };
+  canvas.onclick = () => setPlaying(!playing);
+
+  function loop(now) {
+    if (playing) {
+      if (!audio.paused && !audio.ended) clock = audio.currentTime;
+      else clock += (now - lastNow) / 1000; // tail after the voiceover ends
+      if (clock >= K.total) { clock = K.total; setPlaying(false); if (recorder) recorder.stop(); }
+    }
+    lastNow = now;
+    K.render(ctx, clock);
+    seek.value = String(Math.round((clock / K.total) * 1000));
+    timeEl.textContent = `${fmt(clock)} / ${fmt(K.total)}`;
+    hint.textContent = `Scene: ${K.sceneAt(clock)}`;
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+
+  // Real-time WebM export (canvas + voiceover). For a frame-exact MP4 use tools/render.mjs.
+  let recorder = null;
+  document.getElementById('rec').onclick = () => {
+    if (recorder) { recorder.stop(); return; }
+    const ac = new AudioContext();
+    const src = ac.createMediaElementSource(audio);
+    const dest = ac.createMediaStreamDestination();
+    src.connect(dest); src.connect(ac.destination);
+    const stream = new MediaStream([...canvas.captureStream(30).getVideoTracks(), ...dest.stream.getAudioTracks()]);
+    const chunks = [];
+    recorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9,opus', videoBitsPerSecond: 12e6 });
+    recorder.ondataavailable = (e) => e.data.size && chunks.push(e.data);
+    recorder.onstop = () => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob(chunks, { type: 'video/webm' }));
+      a.download = 'kdp-service-short.webm'; a.click();
+      recorder = null; document.getElementById('rec').textContent = '● Record WebM';
+    };
+    clock = 0; audio.currentTime = 0;
+    recorder.start(); document.getElementById('rec').textContent = '■ Stop';
+    setPlaying(true);
+  };
+})();
+</script>
+</body>
+</html>

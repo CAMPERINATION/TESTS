@@ -1,0 +1,16 @@
+{
+  "name": "kdp-service-short",
+  "private": true,
+  "type": "module",
+  "description": "Vertical short: 'I Tried Turning My KDP Experience Into a Service' — original 2D animation drawn in JavaScript, synced to the voiceover.",
+  "scripts": {
+    "align": "python3 tools/align.py audio/voiceover.wav script.txt src/timing.js",
+    "render": "node tools/render.mjs",
+    "stills": "node tools/render.mjs --stills",
+    "serve": "npx http-server -c-1 -p 8080 ."
+  },
+  "devDependencies": {
+    "ffmpeg-static": "^5.2.0",
+    "playwright": "^1.56.1"
+  }
+}
