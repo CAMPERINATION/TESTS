@@ -23,13 +23,18 @@ phone outline marked "Not tested yet".
 ```bash
 npm install && npx playwright install chromium        # playwright + ffmpeg-static
 python3 tools/tighten_vo.py media/voiceover_raw.wav media/voiceover.wav
-python3 tools/align.py media/voiceover.wav script.txt src/timing.js   # word timings for captions/beats
+python3 tools/asr_align.py media/voiceover.wav script.txt src/timing.js   # word timings for captions/beats
 python3 tools/extract_frames.py                                        # real footage → frames/
 npm run render                                                         # → out/bakery-prompt-short.mp4
 node tools/render.mjs --stills 3,20,45    # PNG stills for checking frames
 ```
 Preview in a browser with `npx http-server -c-1 .` → `index.html` (play/scrub, with the voiceover).
-The Python tools need `numpy`.
+The Python tools need `numpy` and `pocketsphinx` (`pip install numpy pocketsphinx`).
+
+### Caption timing
+`tools/asr_align.py` runs offline speech recognition (pocketsphinx's bundled English model) over the voiceover,
+then matches the recognised words to `script.txt` with a similarity-scored alignment, so captions use the script's
+exact wording but the audio's real word timings. Every scene beat is keyed to phrases, so it follows too.
 
 ## Sound
 `tools/mix.py` builds the soundtrack: the voiceover up front, an original music bed synthesized in code (warm
